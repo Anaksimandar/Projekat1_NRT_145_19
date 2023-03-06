@@ -1,0 +1,19 @@
+{
+  "name": "xml-express-app",
+  "version": "1.0.0",
+  "description": "1. projekat iz predmeta Integracija softverskih tehnologija",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Aleksandar Petrovic",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "nodeman": "^1.1.2",
+    "xml2js": "^0.4.23"
+  }
+}
