@@ -14,11 +14,19 @@
 <body>
    
     <div class="container">
+        <div class="message-container">
+            <% if (message) { %>
+                <p class="alert alert-success">
+                    <%= message %>
+                </p>
+                <% } %>
+        </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link active" href="/">Pocetna</a></li>
             </ul>
         </nav>
+        
         <h1>Kreiraj oglas</h1>
         <div class="row">
                 <div class="col-4">
@@ -38,6 +46,9 @@
                             <div class="col-6">
                                 <h6>Cena</h6>
                                 <input type="number" id="vrednost" name="vrednost" class="form-control">
+                                <% if (errors.vrednost) { %>
+                                    <p style="color: red;"><%= errors.vrednost %></p>  
+                                <% } %>
                             </div>
                         </div>
 
@@ -50,11 +61,21 @@
                                     <option value="rublja">rublja</option>
                                     <option value="dolar">dolar</option>
                                 </select>
+                                <% if (errors.valuta) { %>
+                                    <p style="color: red;">
+                                        <%= errors.valuta %>
+                                    </p>
+                                <% } %>
                             </div>
 
                             <div class="col-6">
                                 <h6>Opis predmeta</h6>
                                 <textarea class="form-control" name="opis" id="opis"></textarea>
+                                <% if (errors.opis) { %>
+                                    <p style="color: red;">
+                                        <%= errors.opis %>
+                                    </p>
+                                <% } %>
                             </div>
                         </div>
 
@@ -62,12 +83,22 @@
                             <div class="col-5">
                                 <h6>Datum isteka</h6>
                                 <input id="datum" name="datum" type="date" required class="form-control" placeholder="DD-MM-YYYY">
+                                <% if (errors.datum) { %>
+                                    <p style="color: red;">
+                                        <%= errors.datum %>
+                                    </p>
+                                <% } %>
                             </div> 
                             <div class="col-7">
                                 <h6>Tagovi</h6>
                                 <div class="d-flex">
                                     <div>
                                         <input class="form-control" id="tagInput" type="text"></input>
+                                        <% if (errors.tags) { %>
+                                            <p style="color: red;">
+                                                <%= errors.tags %>
+                                            </p>
+                                        <% } %>
                                     </div>
                                     <div>
                                         <button type="button" id="dodajTagBtn" class="btn btn-info">Dodaj</button>
@@ -79,19 +110,22 @@
                         
                         <div class="row">
                             <h6>Mejlovi:</h6>
-                            
-
                             <div class="col-5">
                                 <select class="form-select" id="tipMejla">
                                     <option value="privatni">privatni</option>
                                     <option value="poslovni">poslovni</option>
-                                </select>
+                                </select> 
                             </div>
 
                             <div class="col-7">
                                 <div class="d-flex">
                                     <div>
                                         <input class="form-control" id="inputMejl" type="email"></input>
+                                        <% if (errors.mails) { %>
+                                            <p style="color: red;">
+                                                <%= errors.mails %>
+                                            </p>
+                                        <% } %>
                                     </div>
                                     <div>
                                         <button type="button" id="dodajMejl" class="btn btn-info mb-2">Dodaj</button>
@@ -105,6 +139,10 @@
                         <a href="/" class="btn btn-danger">Ponisti</a>
                     </form>
                 </div>   
+        </div>
+        <div class="errors-container">
+            <!-- Display validation errors if any -->
+            
         </div>
     </div>
 
@@ -148,6 +186,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -284,7 +323,7 @@
                 const tagInputElement = document.createElement('input');
                 tagInputElement.classList.add('form-control');
                 tagInputElement.type = 'text';
-                tagInputElement.name = 'tagovi'
+                tagInputElement.name = 'tags'
                 tagInputElement.value = tagText;
                 tagInputElement.readOnly = true;
 
