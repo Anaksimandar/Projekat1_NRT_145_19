@@ -55,7 +55,7 @@
                     </div>
                     <div>
                         <label class="form-label">Tagovi</label>
-                        <div class="d-flex">
+                        <div class="d-flex mb-4">
                             <div>
                                 <input class="form-control" id="tagInput" type="text"></input>
                             </div>
@@ -64,27 +64,23 @@
                             </div>
                         </div>
                         <span id="prikazTagova">
-                            
                             <% for(let i=0; i < data.tagovi.length; i++) { %>
-                                <div class="tag mb-2 d-flex tag">
+                                <div class="tag d-flex">
                                     <input class="form-control w-25" value="<%= data.tagovi[i] %>" type="text" readonly />
                                     <button id="editTagBtn" type="button" onclick="editTag(this)" class="btn btn-sm btn-warning me-1">Edit</button>
                                     <button id="deleteTagBtn" type="button" onclick="removeTag(this)" class="btn btn-sm btn-danger">Remove</button>
                                 </div>
-                            <%} %>
-                                
-                            
+                            <%} %> 
                         </span>
-                            <div class="d-flex">
+                            <label class="form-label">Mejlovi</label>
+                            <div class="d-flex mb-4">
                                 <select class="form-select" id="tipMejla">
                                     <option value="privatni">privatni</option>
                                     <option value="poslovni">poslovni</option>
                                 </select>
-                        
                                 <input class="form-control" id="inputMejl" type="email"></input>
                                 <button type="button" id="dodajMejlBtn" class="btn btn-info">Dodaj</button>
                             </div>
-                        <label class="form-label">Mejlovi</label>
                         <span id="listaMejlova">
                                 <% for(let i=0; i < data.mails.length; i++) { %>
                                     <div class="d-flex mb-2">
@@ -291,14 +287,14 @@
 
         function dodajTag() {
             const tagElement = document.createElement('div');
-            tagElement.classList.add('tag', 'mb-2', 'd-block');
+            tagElement.classList.add('tag', 'd-flex');
             console.log(tagElement);
             const tagText = tagInput.value.trim();
             if (tagText) {
                 
                 const tagInputElement = document.createElement('input');
                 
-                tagInputElement.classList.add('form-control', 'w-25');
+                tagInputElement.classList.add('form-control','w-25');
                 tagInputElement.type = 'text';
                 tagInputElement.name = 'tagovi';
                 tagInputElement.readOnly = true;
@@ -307,7 +303,7 @@
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Edit';
                 editBtn.type = 'button';
-                editBtn.classList.add('btn', 'btn-sm', 'btn-warning', 'me-1');
+                editBtn.classList.add('btn', 'btn-sm', 'mx-2','btn-warning');
 
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = 'Remove';

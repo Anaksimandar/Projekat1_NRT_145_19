@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios');
-
+const validateData = require('./helper-functions/validation/validation');
 const app = express();
 exports.app = app;
 app.set('view engine', 'ejs');
@@ -11,7 +11,8 @@ app.get('/',async(req,res)=>{
     await axios.get(`http://localhost:5005/svi-oglasi`)
     .then(result=>{
         oglasi = result.data;
-        res.render('index',{data:result.data});
+        
+        res.render('index', { data: result.data});
         //console.log(oglasi);
     })
     .catch(err=>{
@@ -21,7 +22,7 @@ app.get('/',async(req,res)=>{
 })
 
 app.get('/oglas/new',(req,res)=>{
-    res.render('novOglas');
+    res.render('novOglas',{errors:[],message:null});
 })
 
 app.get('/oglas/edit/:id',async (req,res)=>{
@@ -42,11 +43,18 @@ app.get('/oglas/edit/:id',async (req,res)=>{
 
 app.post('/oglas/new', async (req,res)=>{
     const body = req.body;
-
-    const tagovi = req.body.tagovi || [];
-    // one mail will se send as string, more then one as array.
-    // We are making sure we have array because working with string in for loop will cause bug
-    body.mails = Array.isArray(body.mails) ? body.mails : [body.mails]; 
+    console.log(body);
+    
+    debugger
+    const errors = validateData(body);
+    console.log(errors);
+    
+    if (Object.keys(errors).length){
+        return res.render("novOglas",{
+            errors:errors
+        });
+    }
+    const tagovi = body.tagovi;
 
     const Cena = new Object();
     Cena.vrednost = body.vrednost;
@@ -68,21 +76,21 @@ app.post('/oglas/new', async (req,res)=>{
         cena: Cena,
         opis: body.opis,
         datum: body.datum,
-        tagovi: tagovi,
+        tags: tagovi,
         mails: mails
     }
-
     
     await axios.post(`http://localhost:5005/oglas/new`, novOglas)
     .then(result=>{
-        res.redirect('/')
+        console.log(result); // notification
+        res.redirect('/');
     })
     .catch(err =>{
         res.send(`Doslo je do greske: ` + err);
     })
 })
 
-app.get('/oglas/delete/:id',async (req,res)=>{
+app.get('/oglas/delete/:id', async (req,res)=>{
     await axios.delete(`http://localhost:5005/oglas/delete/${req.params.id}`)
     .then(result=>{
         res.render('index',{data:result.data});
@@ -92,25 +100,24 @@ app.get('/oglas/delete/:id',async (req,res)=>{
     })
 })
 
-app.post('/oglas/edit',async (req,res)=>{
-    const body = req.body;
-
-    const tagovi = body.tagovi || [];
-
-    if (typeof (tagovi) == String) {
-        tagovi = [tagovi];
-    }
-    body.mails = body.mails || [];
-
+app.post('/oglas/edit', async (req,res)=>{
+    const formData = req.body;
+    if(formData)
+    
+    req.body.mails = req.body.mails || []; // making sure value isnt undefined
+    body.mails = Array.isArray(body.mails) ? body.mails : [body.mails];
+    body.tagovi = Array.isArray(body.tagovi) ? body.tagovi : [body.tagovi];
+    tagovi = body.tagovi;
     const Cena = new Object();
     Cena.vrednost = body.vrednost;
     Cena.valuta = body.valuta;
+    console.log(body, 'klijent');
 
     const mails = [];
-    for (let i = 0; i < body.mails.length; i++) {
+    for(let i = 0; i < body.mails.length; i++) {
         const Mail = new Object();
-        Mail.mail = body.mails[i];
-        Mail.tip = body.type[i];
+        Mail.mail = body.mail[i];
+        Mail.tip = body.mailType[i];
         mails.push(Mail);
     }
     
