@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 const app = express();
+exports.app = app;
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended:false}));
 
@@ -11,86 +12,25 @@ app.get('/',async(req,res)=>{
     .then(result=>{
         oglasi = result.data;
         res.render('index',{data:result.data});
-        console.log(oglasi);
+        //console.log(oglasi);
     })
     .catch(err=>{
         res.send('Doslo je do greske' + err);
     })
     
 })
+
 app.get('/oglas/new',(req,res)=>{
     res.render('novOglas');
-})
-
-app.post('/oglas/new',async (req,res)=>{
-    const Cena = new Object();
-    Cena.valuta = req.body.valuta;
-    Cena.vrednost = req.body.vrednost;
-
-    const Tagovi = new Object();
-    Tagovi.tagovi = [];
-    req.body.tagovi.split(" ").forEach(tag => {
-        Tagovi.tagovi.push(tag);
-    });
-
-    const Email = new Object();
-    Email.mail = [];
-    //let regex = /\r/gi;
-    req.body.privatni.split('\n').forEach(mejl=>{
-        const privatni = new Object();
-        privatni.tip = 'privatni';
-        privatni.mail = mejl;
-        Email.mail.push(privatni);
-    })
-    
-    req.body.poslovni.split('\n').forEach(mejl=>{
-        const poslovni = new Object();
-        poslovni.tip = 'poslovni';
-        poslovni.mail = mejl;
-        Email.mail.push(poslovni);
-    })
-
-    await axios.post(`http://localhost:5005/oglas/new`,{
-        id:0,
-        kategorija:req.body.kategorija,
-        cena:Cena,
-        opis:req.body.text,
-        datum:req.body.datum,
-        email:Email,
-        tagovi:Tagovi.tagovi
-
-
-    })
-    .then(result=>{
-        res.redirect('/');
-        //res.render('index',{data:result.data});
-    })
-    .catch(err=>{
-        res.send('Doslo je do greske' + err);
-    })
 })
 
 app.get('/oglas/edit/:id',async (req,res)=>{
     await axios.get(`http://localhost:5005/oglas/${req.params.id}`)
     
     .then(result=>{
-        let tagovi = "";
-        result.data[0].tagovi.forEach(tag => {
-            tagovi += `${tag}` + ' ';
-        });
         
-        let privatni = "";
-        let poslovni = "";
-        result.data[0].email.mail.forEach(mejl=>{
-            if(mejl.tip == "privatni"){
-                privatni += `${mejl.mail+'\n'}`;
-            }
-            if(mejl.tip == "poslovni"){
-                poslovni += `${mejl.mail+'\n'}`;
-            }
-        })
-        
-        res.render('izmeniOglas',{data:result.data,tagovi:tagovi,privatni:privatni,poslovni:poslovni});
+        console.log(result.data);
+        res.render('izmeniOglas', { data: result.data});
         
     })
     .catch(err=>{
@@ -98,6 +38,48 @@ app.get('/oglas/edit/:id',async (req,res)=>{
     })
     
     
+})
+
+app.post('/oglas/new', async (req,res)=>{
+    const body = req.body;
+
+    const tagovi = req.body.tagovi || [];
+    // one mail will se send as string, more then one as array.
+    // We are making sure we have array because working with string in for loop will cause bug
+    body.mails = Array.isArray(body.mails) ? body.mails : [body.mails]; 
+
+    const Cena = new Object();
+    Cena.vrednost = body.vrednost;
+    Cena.valuta = body.valuta;
+
+
+    const mails = [];
+    for(let i = 0; i < body.mails.length; i++){
+        console.log(body);
+        
+        const Mail = new Object();
+        Mail.mail = body.mails[i];
+        Mail.tip = body.type[i];
+        mails.push(Mail);
+    }
+    
+    const novOglas = {
+        kategorija: body.kategorija,
+        cena: Cena,
+        opis: body.opis,
+        datum: body.datum,
+        tagovi: tagovi,
+        mails: mails
+    }
+
+    
+    await axios.post(`http://localhost:5005/oglas/new`, novOglas)
+    .then(result=>{
+        res.redirect('/')
+    })
+    .catch(err =>{
+        res.send(`Doslo je do greske: ` + err);
+    })
 })
 
 app.get('/oglas/delete/:id',async (req,res)=>{
@@ -111,8 +93,42 @@ app.get('/oglas/delete/:id',async (req,res)=>{
 })
 
 app.post('/oglas/edit',async (req,res)=>{
-    console.log(req.body);
-    await axios.put(`http://localhost:5005/oglas/edit/${req.body.id}`,req.body)
+    const body = req.body;
+
+    const tagovi = body.tagovi || [];
+
+    if (typeof (tagovi) == String) {
+        tagovi = [tagovi];
+    }
+    body.mails = body.mails || [];
+
+    const Cena = new Object();
+    Cena.vrednost = body.vrednost;
+    Cena.valuta = body.valuta;
+
+    const mails = [];
+    for (let i = 0; i < body.mails.length; i++) {
+        const Mail = new Object();
+        Mail.mail = body.mails[i];
+        Mail.tip = body.type[i];
+        mails.push(Mail);
+    }
+    
+    const novOglas = {
+        id: body.id,
+        kategorija: body.kategorija,
+        cena: Cena,
+        opis: body.opis,
+        datum: body.datum,
+        tagovi: tagovi,
+        mails: mails
+    }
+
+    console.log(novOglas);
+
+
+    await axios.put(`http://localhost:5005/oglas/edit/${req.body.id}`, novOglas)
+
 
     .then(result=>{
         res.redirect('/');
@@ -135,5 +151,5 @@ app.get('/filtriraj',async (req,res)=>{
 })
 
 app.listen(5000,()=>{
-    console.log('Server je aktivan na portu 5000');
+    console.log('Klijent je aktivan na portu 5000');
 })

@@ -17,13 +17,13 @@ const sacuvajOglase=(data)=>{
     fs.writeFileSync(PATH,JSON.stringify(data,null,2));
 }
 
-exports.allOglasi = () => {
+exports.getAllOglasi = () => {
     return procitajOglase();
 }
 
 exports.addOglas = (noviOglas) => {
     let id=1;
-    let oglasi=this.allOglasi();
+    let oglasi=this.getAllOglasi();
     if(oglasi.length>0){
         id=oglasi[oglasi.length-1].id+1;
     }
@@ -32,12 +32,12 @@ exports.addOglas = (noviOglas) => {
     sacuvajOglase(oglasi);
 }
 
-exports.getOglasi = (id) => {
-    return this.allOglasi().find(x => x.id == id);
+exports.getOglasById = (id) => {
+    return this.getAllOglasi().find(x => x.id == id);
 }
 
 exports.izmeniOglas=(novOglas)=>{
-    let oglasi=this.allOglasi();
+    let oglasi=this.getAllOglasi();
     
     oglasi.forEach(oglas=>{
         if(oglas.id == novOglas.id){
@@ -47,48 +47,19 @@ exports.izmeniOglas=(novOglas)=>{
             oglas.opis = novOglas.text;
             oglas.datum = novOglas.datum;
 
-            // "Ciscenje" mejlova od nepotrebnih znakova
-            const Mejl = new Object();
-            Mejl.mail = [];
-            let privatni = [];
-            let poslovni = [];
-            let re = /\r\n/g;//global(default will remove just first found), i - ignore case
+            oglas.mail = novOglas.mail;
 
-            privatni = novOglas.privatni.replace(re,"/");
-            poslovni = novOglas.poslovni.replace(re,"/");
-
-            privatni = privatni.split("/");
-            poslovni = poslovni.split("/");
-            
-            privatni = privatni.filter(t=>t);
-            poslovni = poslovni.filter(t=>t);
-
-            privatni.forEach(m => {
-                Mejl.mail.push({tip:'privatni',mail:m});
-            });
-            poslovni.forEach(m => {
-                Mejl.mail.push({tip:'poslovni',mail:m});
-            });
-            
-            oglas.email.mail = Mejl.mail;
-
-            // "Ciscenje tagova od belina"
-            let filtriraniTagovi = novOglas.tagovi.split(" ").filter(t=>t);
-            oglas.tagovi = filtriraniTagovi;
+            oglas.tagovi = novOglas.tagovi;
        
         }
 
     })
 
-    
-    
-    
-    
     sacuvajOglase(oglasi);
 }
 
-exports.deleteOglasi = (id) => {
-    sacuvajOglase(this.allOglasi().filter(oglasi=>oglasi.id!=id));
+exports.deleteOglas = (id) => {
+    sacuvajOglase(this.getAllOglasi().filter(oglasi=>oglasi.id!=id));
 }
 
 exports.getOglasBy = (kategorija,dgd,ggd,dgc,ggc) =>{
@@ -98,7 +69,7 @@ exports.getOglasBy = (kategorija,dgd,ggd,dgc,ggc) =>{
         return formatiranDatum;
     }
     let oglasi= []
-    this.allOglasi().forEach(element=>{
+    this.getAllOglasi().forEach(element=>{
         if(((kategorija=="")?true:element.kategorija.includes(kategorija)) &&
          ((dgd=="")?true:formatiranjeDatuma(element.datum)>formatiranjeDatuma(dgd)) &&
           ((ggd=="")?true:formatiranjeDatuma(element.datum)<formatiranjeDatuma(ggd)) &&

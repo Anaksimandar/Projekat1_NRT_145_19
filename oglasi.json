@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "kategorija": "muzicki instrument",
+    "cena": {},
+    "datum": "2024-10-14",
+    "tagovi": [],
+    "mails": [
+      {
+        "mail": "acodex00@gmai.com",
+        "tip": "privatni"
+      },
+      {
+        "mail": "acopetrovic@gmai.com",
+        "tip": "privatni"
+      }
+    ],
+    "id": 2
+  },
+  {
+    "kategorija": "muzicki instrument",
+    "cena": {
+      "vrednost": "21",
+      "valuta": "dinar"
+    },
+    "opis": "",
+    "datum": "2024-10-14",
+    "tagovi": [],
+    "mails": [
+      {
+        "mail": "acopetrovic@gmai.com",
+        "tip": "privatni"
+      },
+      {
+        "mail": "acodex00@gmai.com",
+        "tip": "privatni"
+      }
+    ],
+    "id": 3
+  }
+]

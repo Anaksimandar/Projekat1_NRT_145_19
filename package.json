@@ -4,7 +4,8 @@
   "description": "1. projekat iz predmeta Integracija softverskih tehnologija",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "klijent": "nodemon index.js",
+    "servis": "nodemon servisOglasi.js"
   },
   "author": "Aleksandar Petrovic",
   "license": "ISC",
