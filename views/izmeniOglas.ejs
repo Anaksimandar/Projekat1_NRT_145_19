@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         <label for="text">Opis predmeta</label>
-                        <textarea class="form-control" name="text" id="text"><%=data.opis%></textarea>
+                        <textarea class="form-control" name="opis" id="text"><%=data.opis%></textarea>
                     </div>
                     <div>
                         <label class="form-label" for="datum">Datum isteka</label>
@@ -64,13 +64,16 @@
                             </div>
                         </div>
                         <span id="prikazTagova">
-                            <% for(let i=0; i < data.tagovi.length; i++) { %>
-                                <div class="tag d-flex">
-                                    <input class="form-control w-25" value="<%= data.tagovi[i] %>" type="text" readonly />
-                                    <button id="editTagBtn" type="button" onclick="editTag(this)" class="btn btn-sm btn-warning me-1">Edit</button>
-                                    <button id="deleteTagBtn" type="button" onclick="removeTag(this)" class="btn btn-sm btn-danger">Remove</button>
-                                </div>
-                            <%} %> 
+                            <% if (data.tags){ %>
+                                <% for(let i=0; i < data.tags.length; i++) { %>
+                                    <div class="tag d-flex">
+                                        <input class="form-control w-25" name="tags" value="<%= data.tags[i] %>" type="text" readonly />
+                                        <button id="editTagBtn" type="button" onclick="editTag(this)" class="btn btn-sm btn-warning me-1">Edit</button>
+                                        <button id="deleteTagBtn" type="button" onclick="removeTag(this)" class="btn btn-sm btn-danger">Remove</button>
+                                    </div>
+                                <%} %>
+                            <% } %>
+                           
                         </span>
                             <label class="form-label">Mejlovi</label>
                             <div class="d-flex mb-4">
@@ -82,16 +85,17 @@
                                 <button type="button" id="dodajMejlBtn" class="btn btn-info">Dodaj</button>
                             </div>
                         <span id="listaMejlova">
-                                <% for(let i=0; i < data.mails.length; i++) { %>
-                                    <div class="d-flex mb-2">
-                                        <input id="mailTextInput" readonly type="input"  class="form-control"
-                                            value="<%=data.mails[i].mail%>" />
-                                        <input id="mailTypeInput" readonly type="input"  class="form-control mx-2"
-                                            value="<%=data.mails[i].tip%>" />
-                                        <button onclick="editMail(this)" type="button" class="btn-sm btn btn-warning  me-1">Edit</button>
-                                        <button onclick="removeMail(this)" type="button" class="btn-sm btn btn-danger ">Remove</button>
-                                    </div>
-                                <%}%>
+                                <% if (data.mails){ %>
+                                    <% for(let i=0; i < data.mails.length; i++) { %>
+                                        <div class="d-flex mb-2">
+                                            <input id="mailTextInput" name="mails" readonly type="input" class="form-control" value="<%=data.mails[i].mail%>" />
+                                            <input id="mailTypeInput" name="mailType" readonly type="input" class="form-control mx-2" value="<%=data.mails[i].tip%>" />
+                                            <button onclick="editMail(this)" type="button" class="btn-sm btn btn-warning  me-1">Edit</button>
+                                            <button onclick="removeMail(this)" type="button" class="btn-sm btn btn-danger ">Remove</button>
+                                        </div>
+                                    <%}%>
+                                <% } %>
+                                
                         </span>
 
                         
@@ -221,7 +225,7 @@
             const mailInputElement = document.createElement('input');
             mailInputElement.classList.add('form-control');
             mailInputElement.type = 'text';
-            mailInputElement.name = 'mail';
+            mailInputElement.name = 'mails';
             mailInputElement.value = mailText;
             mailInputElement.readOnly = true;
 
@@ -267,10 +271,10 @@
         function editTag(editButton) {
             var modifiedTag = editButton.parentNode.getElementsByTagName('input')[0];
             currentTagElement = modifiedTag;
-            openModal();
+            openEditTagModal();
         }
 
-        function openModal() {
+        function openEditTagModal() {
             editTagInputModal.value = currentTagElement.value.trim();
             editTagModal.show();
         }
@@ -296,7 +300,7 @@
                 
                 tagInputElement.classList.add('form-control','w-25');
                 tagInputElement.type = 'text';
-                tagInputElement.name = 'tagovi';
+                tagInputElement.name = 'tags';
                 tagInputElement.readOnly = true;
                 tagInputElement.value = tagText;
 
@@ -346,12 +350,12 @@
             let tagElements = document.querySelectorAll("span.badge.bg-secondary.me-2");
             let listOfTags = Array.from(tagElements).map(te => te.textContent);
             // Remove any existing hidden inputs for tags to avoid duplicates
-            document.querySelectorAll('input[name="tagovi"]').forEach(input => input.remove());
+            document.querySelectorAll('input[name="tags"]').forEach(input => input.remove());
             // Create and append hidden inputs for each tag
             listOfTags.forEach(tag => {
                 const hiddenInput = document.createElement('input');
                 hiddenInput.type = 'hidden';
-                hiddenInput.name = 'tagovi';
+                hiddenInput.name = 'tags';
                 hiddenInput.value = tag;
                 form.appendChild(hiddenInput);
             });

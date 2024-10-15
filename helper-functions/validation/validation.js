@@ -12,13 +12,13 @@ const validateData = (data) => {
     }
 
     // Validate 'valuta' field (required, string, specific values only)
-    const allowedValuta = ['dinar', 'euro', 'dolar']; // Example valid options
+    const allowedValuta = ['dinar', 'euro', 'dolar','rublja']; // Example valid options
     if (!data.valuta || !allowedValuta.includes(data.valuta)) {
         errors.valuta = 'Valuta field is required';
     }
 
     // Validate 'opis' field (optional, string)
-    if (!data.opis || typeof data.opis !== 'string') {
+    if (!data.opis || typeof data.opis !== 'string' || data.opis.trim() === '') {
         errors.opis = 'Opis field is required';
     }
 
@@ -31,6 +31,14 @@ const validateData = (data) => {
     // Validate 'tags' field (required, must be an array of valid tags)
     if (!Array.isArray(data.tags)) {
         errors.tags = 'Tags should be an array';
+    } 
+
+    if (data.tags.length < 1) {
+        errors.tags = 'Tag field cannot be empty';
+    }
+
+    if (data.mails.length < 1) {
+        errors.mails = 'Mail field cannot be empty';
     } 
 
     // Validate 'mails' field (required, must be an array of valid emails)

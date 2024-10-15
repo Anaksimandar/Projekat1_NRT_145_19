@@ -2,11 +2,14 @@
   {
     "kategorija": "muzicki instrument",
     "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
+      "vrednost": "2000",
+      "valuta": "dolar"
     },
-    "opis": "des1",
-    "datum": "2024-10-08",
+    "datum": "2024-10-16",
+    "tags": [
+      "tag1",
+      "tag1"
+    ],
     "mails": [
       {
         "mail": "acodex00@gmai.com",
@@ -17,166 +20,7 @@
         "tip": "privatni"
       }
     ],
-    "id": 1
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "DES1",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 2
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 3
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "21",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 4
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 5
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-09",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 6
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "21",
-      "valuta": "dinar"
-    },
-    "opis": "d",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 7
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-09",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 8
-  },
-  {
-    "kategorija": "muzicki instrument",
-    "cena": {
-      "vrednost": "22",
-      "valuta": "dinar"
-    },
-    "opis": "des1",
-    "datum": "2024-10-08",
-    "mails": [
-      {
-        "mail": "acodex00@gmai.com",
-        "tip": "privatni"
-      },
-      {
-        "mail": "acopetrovic@gmai.com",
-        "tip": "privatni"
-      }
-    ],
-    "id": 9
+    "id": 1,
+    "opis": "des1"
   }
 ]

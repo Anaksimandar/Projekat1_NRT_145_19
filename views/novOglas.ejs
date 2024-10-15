@@ -12,15 +12,7 @@
 </style>
 
 <body>
-   
     <div class="container">
-        <div class="message-container">
-            <% if (message) { %>
-                <p class="alert alert-success">
-                    <%= message %>
-                </p>
-                <% } %>
-        </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link active" href="/">Pocetna</a></li>
@@ -35,7 +27,7 @@
                             <div class="col-6">
                                 <h6>Kategorija</h6>
                                 <select class="form-select mb-2" name="kategorija" id="kategorija">
-                                    <option selected value="muzicki instrument">muzicki instrument</option>
+                                    <option value="muzicki instrument">muzicki instrument</option>
                                     <option value="odeca">odeca</option>
                                     <option value="kurs">kurs</option>
                                     <option value="bela tehnika">bela tehnika</option>
@@ -45,7 +37,7 @@
 
                             <div class="col-6">
                                 <h6>Cena</h6>
-                                <input type="number" id="vrednost" name="vrednost" class="form-control">
+                                <input type="number" value="<%= formData.vrednost ? formData.vrednost : ''%>" id="vrednost" name="vrednost" class="form-control">
                                 <% if (errors.vrednost) { %>
                                     <p style="color: red;"><%= errors.vrednost %></p>  
                                 <% } %>
@@ -56,8 +48,8 @@
                             <div class="col-6">
                                 <h6>Valuta</h6>
                                 <select class="form-select mb-2" name="valuta" id="valuta">
-                                    <option selected value="dinar">dinar</option>
-                                    <option value="euro">euro</option>
+                                    <option value="dinar">dinar</option>
+                                    <option value="euro" >euro</option>
                                     <option value="rublja">rublja</option>
                                     <option value="dolar">dolar</option>
                                 </select>
@@ -70,7 +62,7 @@
 
                             <div class="col-6">
                                 <h6>Opis predmeta</h6>
-                                <textarea class="form-control" name="opis" id="opis"></textarea>
+                                <textarea class="form-control" name="opis" id="opis"><%= formData.opis ? formData.opis : '' %></textarea>
                                 <% if (errors.opis) { %>
                                     <p style="color: red;">
                                         <%= errors.opis %>
@@ -82,7 +74,7 @@
                         <div class="row">
                             <div class="col-5">
                                 <h6>Datum isteka</h6>
-                                <input id="datum" name="datum" type="date" required class="form-control" placeholder="DD-MM-YYYY">
+                                <input value="<%= formData.datum ? formData.datum : ''%>" id="datum" name="datum" type="date" required class="form-control" placeholder="DD-MM-YYYY">
                                 <% if (errors.datum) { %>
                                     <p style="color: red;">
                                         <%= errors.datum %>
@@ -104,7 +96,20 @@
                                         <button type="button" id="dodajTagBtn" class="btn btn-info">Dodaj</button>
                                     </div>
                                 </div>
+                                <div class="d-block" id="tags-container">
+                                    <% if (formData.tags){ %>
+                                        <% for(let i=0; i < formData.tags.length; i++) { %>
+                                            <div class="d-flex mb-2">
+                                                <input name="tags" id="mailTextInput" readonly type="input" class="form-control"
+                                                    value="<%=formData.tags[i]%>" />
+                                                <button type="button" class="btn-sm btn btn-warning  me-1 edit-btn">Edit</button>
+                                                <button type="button" class="btn-sm btn btn-danger remove-btn">Remove</button>
+                                            </div>
+                                        <%}%>
+                                    <% } %>
+                                </div>
                             </div>
+                            <h5>Novi tagovi:</h5>
                             <span id="prikazTagova"></span>
                         </div>
                         
@@ -116,7 +121,6 @@
                                     <option value="poslovni">poslovni</option>
                                 </select> 
                             </div>
-
                             <div class="col-7">
                                 <div class="d-flex">
                                     <div>
@@ -131,7 +135,20 @@
                                         <button type="button" id="dodajMejl" class="btn btn-info mb-2">Dodaj</button>
                                     </div>
                                 </div>
+                                <div id="mails-container">
+                                    <% if (formData.mails){ %>
+                                        <% for(let i=0; i < formData.mails.length; i++) { %>
+                                            <div class="d-flex mb-2">
+                                                <input id="mailTextInput" name="mails" readonly type="input" class="form-control" value="<%=formData.mails[i]%>" />
+                                                <input id="mailTypeInput" name="type" readonly type="input" class="form-control mx-2" value="<%=formData.type[i]%>" />
+                                                <button type="button" class="btn-sm btn btn-warning  me-1 edit-btn">Edit</button>
+                                                <button type="button" class="btn-sm btn btn-danger remove-btn">Remove</button>
+                                            </div>
+                                        <%}%>
+                                    <% } %>
+                                </div>
                             </div>
+                            <h5>Novi mejlovi:</h5>
                             <div id="listaMejlova"></div>
                         </div>
                         
@@ -147,15 +164,15 @@
     </div>
 
     <!-- Edit Tag Modal -->
-    <div class="modal fade" id="editTagModal" tabindex="-1" aria-labelledby="editTagModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editTagModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editTagModalLabel">Edit Tag</h5>
+                    <h5 class="modal-title" id="editModalLabel">Edit Tag</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="editInputModal" class="form-control">
+                    <input type="text" id="editTagInputModal" class="form-control">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -166,11 +183,11 @@
     </div>
 
     <!-- Edit Mail Modal -->
-    <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mailModal" aria-hidden="true">
+    <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="mailModal">Edit mail</h5>
+                    <h5 class="modal-title" id="mailModalLabel">Edit mail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -197,10 +214,7 @@
         const dodajTagBtn = document.getElementById('dodajTagBtn');
         const tagInput = document.getElementById('tagInput');
         const showTags = document.getElementById('prikazTagova');
-        const editTagModal = new bootstrap.Modal(document.getElementById('editTagModal'));
-        const saveTagModalBtn = document.getElementById("saveTagModalBtn");
         const saveOglasBtn = document.getElementById("sacuvajOglasBtn");
-        const editInputModal = document.getElementById("editInputModal");
 
         // rad sa mejlovima
         const dodajMejlBtn = document.getElementById("dodajMejl");
@@ -209,8 +223,20 @@
         const listaMejlova  = document.getElementById("listaMejlova");
 
         let primaryInputTag;
+        let currentTagElement;
         // let currentInputTag;
         // //let editInputModal;
+
+        // tag modal
+        const editTagModal = new bootstrap.Modal(document.getElementById('editTagModal'));
+        const tagModal = new bootstrap.Modal(document.getElementById("editTagModal"));
+        const editInputModal = document.getElementById("editTagInputModal");
+        const saveTagModalBtn = document.getElementById("saveTagModalBtn");
+         
+        function openTagModal() {
+            editInputModal.value = primaryInputTag;
+            editTagModal.show();
+        }
 
         // mail modal
         const mailModal = new bootstrap.Modal(document.getElementById('mailModal'));
@@ -221,10 +247,49 @@
         let primaryInputMail;
         let primarySelectMailType;
 
-        function openMailModal(){
+        function openMailModal() {
             mailInputFieldModal.value = primaryInputMail.value;
             mailTypeSelectFieldModal.value = primarySelectMailType.value;
+            console.log(mailInputFieldModal.value);
+            
             mailModal.show();
+        }
+        
+        document.getElementById('tags-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('edit-btn')) {
+                editTag(e.target);
+            } else if (e.target.classList.contains('remove-btn')) {
+                removeTag(e.target);
+            }
+        });
+
+        document.getElementById('mails-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('edit-btn')) {
+                editMail(e.target);
+            } else if (e.target.classList.contains('remove-btn')) {
+                removeMail(e.target);
+            }
+        });
+
+        function editMail(editMailBtn) {
+            primaryInputMail = editMailBtn.parentNode.querySelector('#mailTextInput');
+            primarySelectMailType = editMailBtn.parentNode.querySelector('#mailTypeInput');
+            openMailModal();
+        }
+
+        function removeMail(btn) {
+            const parent = btn.parentNode;
+            parent.parentNode.removeChild(parent);
+        }
+
+        function removeTag(button) {
+            var parentDiv = button.parentNode; // button container
+            parentDiv.parentNode.removeChild(parentDiv); // removing child of parent div (container)
+        }
+
+        function editTag(editButton) {
+            primaryInputTag = editButton.parentNode.getElementsByTagName('input')[0];
+            openTagModal();
         }
 
         mailModalSaveBtn.addEventListener('click', function(){
@@ -315,11 +380,10 @@
         dodajTagBtn.addEventListener('click', function () {
             const tagText = tagInput.value.trim();
             if (tagText) {
-                const tagElement = document.createElement('div');
-                tagElement.classList.add('tag', 'mb-2', 'd-flex');
+                
                 
                 const tagContainer = document.createElement('div','my-2');
-                tagContainer.classList.add('tag', 'mb-2', 'd-block');
+                tagContainer.classList.add('tag', 'mb-2','d-flex', 'd-block');
                 const tagInputElement = document.createElement('input');
                 tagInputElement.classList.add('form-control');
                 tagInputElement.type = 'text';
@@ -346,11 +410,11 @@
                     showTags.removeChild(tagElement);
                 });
                 tagContainer.appendChild(tagInputElement);
-                tagElement.appendChild(tagContainer);
-                tagElement.appendChild(editBtn);
-                tagElement.appendChild(removeBtn);
+                //tagElement.appendChild(tagContainer);
+                tagContainer.appendChild(editBtn);
+                tagContainer.appendChild(removeBtn);
 
-                showTags.appendChild(tagElement);
+                showTags.appendChild(tagContainer);
 
                 tagInput.value = '';
 
@@ -368,32 +432,7 @@
             }
         });
 
-        // saveOglasBtn.addEventListener('click',()=>{
-        //     // validation; date, category, valuta, description, tags (nisu obavezni), privatni (nisu obavezni), poslovni mejl (nisu obavezni) (nisu obavezni)
-        //     let kategorija = document.getElementById("kategorija");
-        //     let datum = document.getElementById("datum");
-        //     let valuta = document.getElementById("valuta");
-        //     let cena = document.getElementById("cena");
-        //     let opis = document.getElementById("opis");
-        //     // const form = document.querySelector('form[action="/oglas/new"]');
-        //     // let tagElements = document.querySelectorAll("span.badge.bg-secondary.me-2");
-        //     // let listOfTags = Array.from(tagElements).map(te => te.textContent);
-
-        //     // // Remove any existing hidden inputs for tags to avoid duplicates
-        //     // //document.querySelectorAll('input[name="tagovi"]').forEach(input => input.remove());
-
-        //     // // Create and append hidden inputs for each tag
-        //     // // listOfTags.forEach(tag => {
-        //     // //     const hiddenInput = document.createElement('input');
-        //     // //     hiddenInput.type = 'hidden';
-        //     // //     hiddenInput.name = 'tagovi';
-        //     // //     hiddenInput.value = tag;
-        //     // //     form.appendChild(hiddenInput);
-        //     // // });
-
-        //     console.log(kategorija,datum, valuta, cena, opis, tagovi);
-
-        // })
+        
     });
 </script>
 </body>
