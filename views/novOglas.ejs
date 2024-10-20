@@ -37,7 +37,7 @@
 
                             <div class="col-6">
                                 <h6>Cena</h6>
-                                <input type="number" value="<%= formData.vrednost ? formData.vrednost : ''%>" id="vrednost" name="vrednost" class="form-control">
+                                <input type="number" value="<%= formData.cena && formData.cena.vrednost ? formData.cena.vrednost : ''%>" id="vrednost" name="vrednost" class="form-control">
                                 <% if (errors.vrednost) { %>
                                     <p style="color: red;"><%= errors.vrednost %></p>  
                                 <% } %>
@@ -140,7 +140,7 @@
                                         <% for(let i=0; i < formData.mails.length; i++) { %>
                                             <div class="d-flex mb-2">
                                                 <input id="mailTextInput" name="mails" readonly type="input" class="form-control" value="<%=formData.mails[i]%>" />
-                                                <input id="mailTypeInput" name="type" readonly type="input" class="form-control mx-2" value="<%=formData.type[i]%>" />
+                                                <input id="mailTypeInput" name="tip" readonly type="input" class="form-control mx-2" value="<%=formData.type[i]%>" />
                                                 <button type="button" class="btn-sm btn btn-warning  me-1 edit-btn">Edit</button>
                                                 <button type="button" class="btn-sm btn btn-danger remove-btn">Remove</button>
                                             </div>
@@ -333,7 +333,7 @@
 
             mailTypeElement.classList.add('form-control', 'mx-2');
             mailTypeElement.type = 'text';
-            mailTypeElement.name = 'type';
+            mailTypeElement.name = 'tip';
             mailTypeElement.value = mejlTip;
             mailTypeElement.readOnly = true;
 

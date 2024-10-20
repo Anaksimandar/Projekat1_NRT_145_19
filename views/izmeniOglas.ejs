@@ -15,14 +15,14 @@
             </ul>
         </nav>
 
-        <h1>Kreiraj oglas</h1>
+        <h1>Izmeni oglas</h1>
         <div class="row">
             <div class="col-4">
-                <form>
+                <form method="post" action="/oglas/edit">
                     <div class="row">
                         <div class="col-6">
                             <h6>Kategorija</h6>
-                            <input type="text" id="id" hidden value="<%= formData.id %>">
+                            <input type="text" name="id" id="id" hidden value="<%= formData.id %>">
                             <select class="form-select mb-2" name="kategorija" id="kategorija">
                                 <option value="muzicki instrument">muzicki instrument</option>
                                 <option value="odeca">odeca</option>
@@ -34,13 +34,11 @@
 
                         <div class="col-6">
                             <h6>Cena</h6>
-                            <input type="number" value="<%= formData.cena.vrednost ? formData.cena.vrednost : ''%>" id="vrednost"
+                            <input type="number" value="<%= formData.cena && formData.cena.vrednost ? formData.cena.vrednost : ''%>" id="vrednost" 
                                 name="vrednost" class="form-control">
-                            <% if (errors.vrednost) { %>
-                                <p style="color: red;">
-                                    <%= errors.vrednost %>
-                                </p>
-                            <% } %>
+                                 <% if (errors.vrednost) { %>
+                                    <p style="color: red;"><%= errors.vrednost %></p>
+                                <% } %>
                         </div>
                     </div>
 
@@ -68,7 +66,7 @@
                                 <p style="color: red;">
                                     <%= errors.opis %>
                                 </p>
-                                <% } %>
+                            <% } %>
                         </div>
                     </div>
 
@@ -143,10 +141,10 @@
                                 <% if (formData.mails){ %>
                                     <% for(let i=0; i < formData.mails.length; i++) { %>
                                         <div class="d-flex mb-2">
-                                            <input id="mailTextInput" readonly type="input"
+                                            <input id="mailTextInput" name="mails" readonly type="input"
                                                 class="form-control mailText" value="<%=formData.mails[i].mail%>" />
-                                            <input id="mailTypeInput"  name="type" readonly type="input"
-                                                class="form-control mailType mx-2" value="<%=formData.mails[i].type%>" />
+                                            <input id="mailTypeInput"  name="tip" readonly type="input"
+                                                class="form-control mailType mx-2" value="<%=formData.mails[i].tip%>" />
                                             <button type="button"
                                                 class="btn-sm btn btn-warning  me-1 edit-btn">Edit</button>
                                             <button type="button"
@@ -226,39 +224,7 @@
             const showTags = document.getElementById('prikazTagova');
             const saveOglasBtn = document.getElementById("sacuvajOglasBtn");
 
-            // save post
-            saveOglasBtn.addEventListener('click',function(e){
-                e.preventDefault();
-                // validating form fields
-                const id = document.getElementById("id");
-                const kategorija = document.getElementById("kategorija");
-                const vrednost = document.getElementById("vrednost");
-                const valuta = document.getElementById("valuta");
-                const opis = document.getElementById("opis");
-                const datum = document.getElementById("datum");
-                const tags = document.getElementsByClassName("tags");
-                const mailText = document.getElementsByClassName("mailText");
-                const mailTypes = document.getElementsByClassName("mailType");
-                if(kategorija.value && vrednost.value && valuta.value && opis.value && datum.value && tags && mailText && mailTypes ){
-                    const form = document.querySelector("form");
-                    const formData = new FormData(form);
-                    console.log(form, 'slenje sa frontenda');
-                    
-                    fetch(`http://localhost:5000/oglas/edit`,{
-                        method:'POST',
-                        headers: {
-                            body: formData
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => console.log(data.data))
-                    .catch(err=>{alert(err);})
-                    console.log(kategorija.value, vrednost.value , valuta.value , opis.value , datum.value , tags , mailText, mailTypes)
-                }
-                else{
-                    return alert("All data must be provided");
-                }
-            })
+            
 
             // rad sa mejlovima
             const dodajMejlBtn = document.getElementById("dodajMejl");
@@ -377,7 +343,7 @@
 
                 mailTypeElement.classList.add('form-control', 'mx-2');
                 mailTypeElement.type = 'text';
-                mailTypeElement.name = 'type';
+                mailTypeElement.name = 'tip';
                 mailTypeElement.value = mejlTip;
                 mailTypeElement.readOnly = true;
 

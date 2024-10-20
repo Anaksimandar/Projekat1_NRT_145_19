@@ -46,7 +46,7 @@
                     <!-- Filtering form -->
                     <div class="row me-4">
                         <div class="col">
-                            <form action="/filtriraj" method="get">
+                            <form  action="/filtriraj" method="get">
                                 <div class="input-group">
                                     <input name="kategorija" class="form-control" type="text" placeholder="Unesite kategoriju:">
                                 </div>
@@ -65,75 +65,82 @@
                                         placeholder="Unesite gornju granicu cene:">
                                 </div>
                                 <div>
-                                    <button class="btn btn-info mb-4">Pretrazi</button>
+                                    <button id="filterButton" class="btn btn-info mb-4">Pretrazi</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div id="list-posts-container" class="col-9">
-                    <!-- Listing posts-->
-                    <div class="row">
-                        <div class="col">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Kategorija</th>
-                                        <th scope="col">Cena</th>
-                                        <th scope="col">Opis</th>
-                                        <th scope="col">Datum isteka</th>
-                                        <th scope="col">Tagovi</th>
-                                        <th scope="col">Mejlovi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for(let i=0; i<data.length;i++){%>
-                                        <tr id="prikazRedova">
-                                            <td>
-                                                <%=data[i].kategorija%>
-                                            </td>
-                                            <td>
-                                                <%=data[i].cena.vrednost%>
-                                                <%=data[i].cena.valuta%>
-                                            </td>
-                                            <td>
-                                                <%=data[i].opis%>
-                                            </td>
-                                            <td>
-                                                <%=data[i].datum%>
-                                            </td>
-                                            <td>
-                                                <% for(let j=0;j < data[i].mails.length;j++){%>
-                                                    <small>
-                                                        <%=data[i].tags[j]%>,
-                                                    </small>
-                                                <%} %>
-                                            </td>
-                                            <td>
-                                                <% for(let j=0;j < data[i].mails.length;j++){%>
-                                                    <small>
-                                                        <%=data[i].mails[j].mail%>,
-                                                    </small>
-                                                <%} %>
-                                            </td>
-                                            <td><a href="/oglas/edit/<%= data[i].id %>" class="btn btn-info">Izmeni</a></td>
-                                            <td><a href="/oglas/delete/<%= data[i].id %>" class="btn btn-danger">Obrisi</a></td>
+
+                <% if (data.length == 0) { %>
+                    <div id="list-posts-container" class="col-9">
+                        <p class="alert alert-info">There is not posts.</p>
+                    </div>
+                <% } else { %>
+                    <div id="list-posts-container" class="col-9">
+                        <!-- Listing posts-->
+                        <div class="row">
+                            <div class="col">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Kategorija</th>
+                                            <th scope="col">Cena</th>
+                                            <th scope="col">Opis</th>
+                                            <th scope="col">Datum isteka</th>
+                                            <th scope="col">Tagovi</th>
+                                            <th scope="col">Mejlovi</th>
                                         </tr>
-                                        <%}%>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <% for(let i=0; i<data.length;i++){%>
+                                            <tr id="prikazRedova">
+                                                <td>
+                                                    <%=data[i].kategorija%>
+                                                </td>
+                                                <td>
+                                                    <%=data[i].cena.vrednost%>
+                                                        <%=data[i].cena.valuta%>
+                                                </td>
+                                                <td>
+                                                    <%=data[i].opis%>
+                                                </td>
+                                                <td>
+                                                    <%=data[i].datum%>
+                                                </td>
+                                                <td>
+                                                    <% for(let j=0;j < data[i].tags.length;j++){%>
+                                                        <small>
+                                                            <%=data[i].tags[j]%>,
+                                                        </small>
+                                                        <%} %>
+                                                </td>
+                                                <td>
+                                                    <% for(let j=0;j < data[i].mails.length;j++){%>
+                                                        <small>
+                                                            <%=data[i].mails[j].mail%>,
+                                                        </small>
+                                                        <%} %>
+                                                </td>
+                                                <td><a href="/oglas/edit/<%= data[i].id %>" class="btn btn-info">Izmeni</a></td>
+                                                <td><a href="/oglas/delete/<%= data[i].id %>" class="btn btn-danger">Obrisi</a></td>
+                                            </tr>
+                                            <%}%>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
+                 <% } %>
 
-            
+
+                
+            </div>
         </div>
         
 
     </div>
    
-    
+   
 </body>
 </html>

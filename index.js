@@ -31,7 +31,7 @@ app.get('/oglas/edit/:id',async (req,res)=>{
     
     .then(result=>{
         console.log(result.data , "get oglas by id");
-        res.render('izmeniOglas', { data: result.data});
+        res.render('izmeniOglas', { formData: result.data, errors:[]});
     })
     .catch(err=>{
         res.send('Doslo je do greske' + err);
@@ -52,11 +52,11 @@ function formatingArrayInputs(input){
 }
 
 app.post('/oglas/new', async (req,res)=>{
-    const body = req.body;
-
-    let tagovi = formatingArrayInputs(body.tags);
+    const body = formatingFrontentForm(req.body);
+    console.log(body);
+    body.tags = formatingArrayInputs(body.tags);
     body.mails = formatingArrayInputs(body.mails);
-
+    body.tip = formatingArrayInputs(body.tip);
     console.log(body , 'form data');
     const errors = validateData(body);
     console.log(errors);
@@ -68,19 +68,13 @@ app.post('/oglas/new', async (req,res)=>{
         });
     }
 
-
-    const Cena = new Object();
-    Cena.vrednost = body.vrednost;
-    Cena.valuta = body.valuta;
-
-
     const mails = [];
     for(let i = 0; i < body.mails.length; i++){
         console.log(body);
         
         const Mail = new Object();
         Mail.mail = body.mails[i];
-        Mail.tip = body.type[i];
+        Mail.tip = body.tip[i];
         mails.push(Mail);
     }
 
@@ -88,10 +82,10 @@ app.post('/oglas/new', async (req,res)=>{
     
     const novOglas = {
         kategorija: body.kategorija,
-        cena: Cena,
+        cena: body.cena,
         opis: opis,
         datum: body.datum,
-        tags: tagovi,
+        tags: body.tags,
         mails: mails
     }
     
@@ -115,32 +109,52 @@ app.get('/oglas/delete/:id', async (req,res)=>{
     })
 })
 
+const formatingFrontentForm = (data)=>{
+    data.cena = {
+        vrednost:data.vrednost,
+        valuta:data.valuta
+    };
+
+    delete data.valuta;
+    delete data.vrednost;
+
+    return data;
+}
+
 app.post('/oglas/edit', async (req,res)=>{
-    const formData = req.body;
+    const formData = formatingFrontentForm(req.body);
     
     console.log(formData, "oglas sa frontentda");
     
-    tags = formData.tags;
-    const Cena = new Object();
-    Cena.vrednost = formData.vrednost;
-    Cena.valuta = formData.valuta;
-    console.log(formData, 'klijent');
+    formData.tags = formatingArrayInputs(formData.tags);
+    formData.mails = formatingArrayInputs(formData.mails);
+    formData.tip = formatingArrayInputs(formData.tip);
+    const errors = validateData(formData);
+    console.log(formData, "Salje se nazad pogledu");
+    
+
+    if (Object.keys(errors).length) {
+        return res.render("izmeniOglas", {
+            errors: errors,
+            formData: formData
+        });
+    }
 
     const mails = [];
     for(let i = 0; i < formData.mails.length; i++) {
         const Mail = new Object();
-        Mail.mails = formData.mails[i];
-        Mail.tip = formData.mailType[i];
+        Mail.mail = formData.mails[i];
+        Mail.tip = formData.tip[i];
         mails.push(Mail);
     }
     
     const novOglas = {
         id: formData.id,
         kategorija: formData.kategorija,
-        cena: Cena,
+        cena: formData.cena,
         opis: formData.opis,
         datum: formData.datum,
-        tags: tags,
+        tags: formData.tags,
         mails: mails
     }
 

@@ -7,13 +7,13 @@ const validateData = (data) => {
     }
 
     // Validate 'vrednost' field (optional, if provided must be a number or empty)
-    if (!data.vrednost || isNaN(Number(data.vrednost))) {
+    if (!data.cena.vrednost || isNaN(Number(data.cena.vrednost))) {
         errors.vrednost = 'Vrednost field is required';
     }
 
     // Validate 'valuta' field (required, string, specific values only)
     const allowedValuta = ['dinar', 'euro', 'dolar','rublja']; // Example valid options
-    if (!data.valuta || !allowedValuta.includes(data.valuta)) {
+    if (!data.cena.valuta || !allowedValuta.includes(data.cena.valuta)) {
         errors.valuta = 'Valuta field is required';
     }
 

@@ -16,6 +16,7 @@ deleteOglasi = (req, res) => {
 }
 
 izmeniOglas = (req, res) => {
+    debugger
     console.log(req.body + 'backend');
     radSaOglasima.izmeniOglas(req.body);
     res.send(radSaOglasima.getAllOglasi());

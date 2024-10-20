@@ -40,28 +40,19 @@ exports.getOglasById = (id) => {
 
 exports.izmeniOglas=(novOglas)=>{
     let oglasi=this.getAllOglasi();
-    
     oglasi.forEach(oglas=>{
         if(oglas.id == novOglas.id){
+            console.log(oglas.mails, "existing");
+            console.log(novOglas.mails, "added");
             oglas.kategorija = novOglas.kategorija;
             oglas.cena.vrednost = novOglas.cena.vrednost;
             oglas.cena.valuta = novOglas.cena.valuta;
             oglas.opis = novOglas.opis;
             oglas.datum = novOglas.datum;
-
-            for(let i = 0; i < oglas.mails; i++){
-                oglas.mails[i].mail = oglas.mails[i].mail;
-                oglas.mails[i].tip = oglas.mails[i].tip;
-            }
-            
-            for(let i = 0; i < oglas.tagovi;i++){
-                oglas.tagovi[i] = oglas.tagovi[i];
-            }
-       
+            oglas.mails = novOglas.mails;
+            oglas.tags = novOglas.tags;
         }
-
     })
-
     sacuvajOglase(oglasi);
 }
 
